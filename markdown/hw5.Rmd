@@ -14,6 +14,7 @@ knitr::opts_chunk$set(fig.path = "figs/", echo = TRUE,
 ```{r}
 # packages
 library(readr)
+library(dplyr)
 ```
 
 ```{r}
@@ -26,5 +27,13 @@ homicides <- read_csv("../data/data-homicides-master/homicide-data.csv") %>%
 ```{r}
 # filter to Boston, Massachusetts homicides
 ma_homicides <- homicides %>% 
-  dplyr::filter(city_name == "Boston, MA")
+  dplyr::filter(city_name == "Boston, MA") %>% 
+  # create column for unsolved homicides
+  mutate(unsolved_hom = 
+           disposition %in% c("Closed without arrest","Open/No arrest"),
+  # create column for top 3 victim race (lumps other races into "Other")
+         victim_race_lump = fct_lump(victim_race, n = 3),
+  # create new column with unsolved/solved status
+         solved_status = if_else(unsolved_hom == TRUE,
+                                 "Unsolved", "Solved" ))
 ```
