@@ -15,6 +15,8 @@ knitr::opts_chunk$set(fig.path = "figs/", echo = TRUE,
 # packages
 library(readr)
 library(dplyr)
+library(lubridate)
+library(stringr)
 library(forcats)
 library(tigris)
 library(sf)
@@ -30,15 +32,19 @@ homicides <- read_csv("../data/data-homicides-master/homicide-data.csv") %>%
 ```{r}
 # filter to Boston, Massachusetts homicides
 ma_homicides <- homicides %>% 
-  dplyr::filter(city_name == "Boston, MA") %>% 
+  filter(city_name == "Boston, MA") %>% 
   # create column for unsolved homicides
   mutate(unsolved_hom = 
            disposition %in% c("Closed without arrest","Open/No arrest"),
   # create column for top 3 victim race (lumps other races into "Other")
          victim_race_lump = fct_lump(victim_race, n = 3),
-  # create new column with unsolved/solved status
+  # create new column with status
          solved_status = if_else(unsolved_hom == TRUE,
-                                 "Unsolved", "Solved")) %>% 
+                                 "Unsolved", "Solved" ),
+  # change reported_date to date class
+         reported_date = ymd(reported_date),
+  # extract year and make new column
+         reported_year = str_sub(reported_date, 1, 4)) %>%
   # filter missing latitude and/or longitude coordinates
   filter(!is.na(lat), !is.na(lon))
 ```
@@ -61,3 +67,7 @@ boston_homicides <- st_as_sf(ma_homicides,
   st_set_crs(4269)
 ```
 
+```{r}
+# check range of reported years for graph subtitle
+range(ma_homicides$reported_year)
+```
