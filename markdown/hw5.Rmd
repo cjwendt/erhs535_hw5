@@ -1,0 +1,12 @@
+---
+title: "Mapping Homicide Trends in Boston, MA"
+subtitle: "Homework 5 (option 1) | ERHS 535"
+author: "Caroline Wendt"
+date: "11/22/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.path = "figs/", echo = TRUE,
+                      warning = FALSE, error = FALSE, message = FALSE)
+```
