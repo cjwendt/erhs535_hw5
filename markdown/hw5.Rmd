@@ -10,3 +10,16 @@ output: pdf_document
 knitr::opts_chunk$set(fig.path = "figs/", echo = TRUE,
                       warning = FALSE, error = FALSE, message = FALSE)
 ```
+
+```{r}
+# packages
+library(readr)
+```
+
+```{r}
+# get data
+homicides <- read_csv("../data/data-homicides-master/homicide-data.csv") %>%
+  # create new column called city_name to unite city and state
+  tidyr::unite("city_name", c(city, state), sep = ", ")
+```
+
