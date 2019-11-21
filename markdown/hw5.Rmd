@@ -38,7 +38,9 @@ ma_homicides <- homicides %>%
          victim_race_lump = fct_lump(victim_race, n = 3),
   # create new column with unsolved/solved status
          solved_status = if_else(unsolved_hom == TRUE,
-                                 "Unsolved", "Solved"))
+                                 "Unsolved", "Solved")) %>% 
+  # filter missing latitude and/or longitude coordinates
+  filter(!is.na(lat), !is.na(lon))
 ```
 
 ```{r}
