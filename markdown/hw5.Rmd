@@ -20,6 +20,9 @@ library(stringr)
 library(forcats)
 library(tigris)
 library(sf)
+library(ggplot2)
+library(viridis)
+library(ggdark)
 ```
 
 ```{r}
@@ -71,3 +74,23 @@ boston_homicides <- st_as_sf(ma_homicides,
 # check range of reported years for graph subtitle
 range(ma_homicides$reported_year)
 ```
+
+```{r}
+# map plot of Boston homicides
+ggplot() +
+  geom_sf(data = boston_tracts, color = "black") +
+  geom_sf(data = boston_homicides,
+          aes(color = victim_race_lump, fill = victim_race_lump)) +
+  scale_color_viridis(option = "plasma",
+                     discrete = TRUE,
+                     name = "Victim Race") +
+  scale_fill_viridis(option = "plasma",
+                     discrete = TRUE,
+                     name = "Victim Race") +
+  facet_grid(~ solved_status) +
+  labs(title = "Boston Homicides by Victim Race",
+       subtitle = "Suffolk County | 2007-2017") +
+  dark_theme_gray() +
+  ggplot2::theme(legend.position = "bottom")
+```
+
