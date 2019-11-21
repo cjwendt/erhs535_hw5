@@ -52,3 +52,10 @@ class(boston_tracts)
 ```
 
 
+```{r}
+# change to sf object; say which columns are the coordinates and set a CRS
+boston_homicides <- st_as_sf(ma_homicides,
+                             coords = c("lon", "lat")) %>%
+  st_set_crs(4269)
+```
+
