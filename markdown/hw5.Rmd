@@ -23,3 +23,8 @@ homicides <- read_csv("../data/data-homicides-master/homicide-data.csv") %>%
   tidyr::unite("city_name", c(city, state), sep = ", ")
 ```
 
+```{r}
+# filter to Boston, Massachusetts homicides
+ma_homicides <- homicides %>% 
+  dplyr::filter(city_name == "Boston, MA")
+```
